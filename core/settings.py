@@ -53,10 +53,14 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# Rest Framework Settings
+# Rest Framework
 REST_FRAMEWORK = {
+    #https://www.django-rest-framework.org/api-guide/permissions/#api-reference
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.AllowAny',  #any user can read and write
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  #anon user can read only(can req only safe methods-GET), only auth user can write
+        # 'rest_framework.permissions.IsAdminUser',  #allow only admin user(superuser, is_staff flag is True) 
     ],
 }
 
