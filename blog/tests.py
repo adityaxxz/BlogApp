@@ -1,6 +1,12 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+# from django.contrib.auth import get_user_model
 from blog.models import Post, Category
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
+
+# User = get_user_model()
 
 # Create your tests here.
 

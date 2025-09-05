@@ -2,8 +2,9 @@ from rest_framework import generics
 from blog.models import Post
 from .serializers import PostSerializer
 from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissions
+from rest_framework import viewsets
 
-# Create your views here.
+#! Generic Views
 class PostList(generics.ListCreateAPIView):
     queryset = Post.postobjects.all()   #custom postobjects manager
     serializer_class = PostSerializer
@@ -19,7 +20,7 @@ class PostUserWritePermission(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         
-        return obj.author == request.user
+        return obj.author == request.user 
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
@@ -27,6 +28,18 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission)
     serializer_class = PostSerializer
     permission_classes = [PostUserWritePermission]  #using custom permission class
 
+
+#! ViewSets
+
+class PostList(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Post.postobjects.all()
+    serializer_class = PostSerializer
+
+class PostDetail(viewsets.ModelViewSet, PostUserWritePermission):
+    permission_classes = [PostUserWritePermission]
+    queryset = Post.postobjects.all()
+    serializer_class = PostSerializer
 
 
 """

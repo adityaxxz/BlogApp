@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+# from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils import timezone
 
 # Create your models here.
@@ -26,7 +28,8 @@ class Post (models.Model):
     excerpt = models.TextField(null=True)
     content = models.TextField()
     
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    # author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
 
     slug = models.SlugField(max_length=200, unique_for_date='published')
     published = models.DateTimeField(default=timezone.now)

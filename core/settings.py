@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,10 @@ INSTALLED_APPS = [
     "blog",
     "blog_api",
     "rest_framework",
+    "users",
+    "rest_framework_simplejwt",
+    "corsheaders",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
@@ -57,12 +62,28 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     #https://www.django-rest-framework.org/api-guide/permissions/#api-reference
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.AllowAny',  #any user can read and write
+        'rest_framework.permissions.AllowAny',  #any user can read and write
         # 'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  #anon user can read only(can req only safe methods-GET), only auth user can write
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',  #anon user can read only(can req only safe methods-GET), only auth user can write
         # 'rest_framework.permissions.IsAdminUser',  #allow only admin user(superuser, is_staff flag is True) 
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
+
+AUTH_USER_MODEL = 'users.NewUser'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True, #when a refresh tkn is requested,new access&refresh is gen
+    'BLACKLIST_AFTER_ROTATION': True, #blacklists the old refresh tkn after a new one is gen.
+}
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
 
 ROOT_URLCONF = "core.urls"
 
