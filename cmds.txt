@@ -1,8 +1,13 @@
 py manage.py makemigrations --dry-run --verbosity 3
 py manage.py createsuperuser
 
-pip install djangorestframework 
-pip install coverage
+pip install djangorestframework  djangorestframework-simplejwt
 
+py manage.py check
+py manage.py test
+py manage.py test blog
+
+
+pip install coverage
 coverage run --omit= '*/venv/*' manage.py test
 coverage html
