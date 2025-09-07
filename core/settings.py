@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     "users",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework_simplejwt",
-    
+
     "drf_yasg",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -68,9 +69,10 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',  #anon user can read only(can req only safe methods-GET), only auth user can write
         # 'rest_framework.permissions.IsAdminUser',  #allow only admin user(superuser, is_staff flag is True) 
     ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 AUTH_USER_MODEL = 'users.NewUser'
