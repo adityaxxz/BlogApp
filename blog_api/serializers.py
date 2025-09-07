@@ -6,7 +6,7 @@ from django.conf import settings
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id', 'title', 'slug', 'author', 'excerpt', 'content', 'status')
+        fields = ('id', 'title','image','slug', 'author', 'excerpt', 'content', 'status')
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)

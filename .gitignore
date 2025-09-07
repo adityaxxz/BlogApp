@@ -1,1 +1,5 @@
 .notes.md
+.coverage
+.venv
+
+db.sqlite3

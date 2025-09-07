@@ -6,6 +6,9 @@ from django.utils import timezone
 
 # Create your models here.
 
+def upload_to(instance, filename):
+    return 'posts/{filename}'.format(filename=filename)
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -27,7 +30,9 @@ class Post (models.Model):
     title = models.CharField(max_length=200)
     excerpt = models.TextField(null=True)
     content = models.TextField()
-    
+
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+
     # author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
 
