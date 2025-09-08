@@ -10,6 +10,9 @@ py manage.py check
 py manage.py test
 py manage.py test blog
 
+Testing the oauth setup:
+curl -X POST -d "client_id=<>&client_secret=<>&grant_type=password&username=<>&password=<>" http://localhost:8000/auth/token
+
 
 pip install coverage
 coverage run --omit= '*/venv/*' manage.py test

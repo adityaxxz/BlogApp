@@ -5,7 +5,7 @@ from .models import NewUser
 
 @admin.register(NewUser)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('email', 'id', 'user_name', 'first_name', 'is_active', 'is_staff', 'start_date')
-    list_filter = ('email', 'user_name', 'is_staff')
-    search_fields = ('email', 'user_name', 'first_name')
+    list_display = ('email', 'id', 'username', 'first_name', 'is_active', 'is_staff', 'start_date')
+    list_filter = ('email', 'username', 'is_staff')
+    search_fields = ('email', 'username', 'first_name')
     ordering = ('email',)

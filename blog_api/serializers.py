@@ -10,10 +10,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
-    user_name = serializers.CharField(required=True)
+    username = serializers.CharField(required=True)
     password = serializers.CharField(min_length=3, write_only=True)
 
     class Meta:
         model = settings.AUTH_USER_MODEL
-        fields = ('email', 'user_name', 'first_name')
+        fields = ('email', 'username', 'first_name')
         extra_kwargs = {'password': {'write_only': True}}
