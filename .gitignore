@@ -1,6 +1,13 @@
 .notes.md
-.coverage
 .venv
-.gitignore
 db.sqlite3
 
+# Python
+__pycache__/
+blog/__pycache__
+blog_api/__pycache__
+core/__pycache__
+users/__pycache__
+
+# Coverage reports
+htmlcov/
