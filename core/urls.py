@@ -55,6 +55,9 @@ urlpatterns = [
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
+    #Oauth
+    path('auth/', include('drf_social_oauth2.urls', namespace='drf'))
+
 ]
 
 #allows to work with media folder locally
