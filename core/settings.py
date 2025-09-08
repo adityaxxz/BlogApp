@@ -44,11 +44,16 @@ INSTALLED_APPS = [
     "blog_api",
     "rest_framework",
     "users",
-    "rest_framework_simplejwt.token_blacklist",
-    "rest_framework_simplejwt",
+    # "rest_framework_simplejwt.token_blacklist",
+    # "rest_framework_simplejwt",
 
     "drf_yasg",
     "django_filters",
+
+    #oauth
+    'oauth2_provider',
+    'social_django',
+    'drf_social_oauth2',
 ]
 
 MIDDLEWARE = [
@@ -76,12 +81,12 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'users.NewUser'
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': True, #when a refresh tkn is requested,new access&refresh is gen
-    'BLACKLIST_AFTER_ROTATION': True, #blacklists the old refresh tkn after a new one is gen.
-}
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+#     'ROTATE_REFRESH_TOKENS': True, #when a refresh tkn is requested,new access&refresh is gen
+#     'BLACKLIST_AFTER_ROTATION': True, #blacklists the old refresh tkn after a new one is gen.
+# }
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',

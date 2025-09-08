@@ -1,5 +1,6 @@
 .notes.md
 .coverage
 .venv
-
+.gitignore
 db.sqlite3
+
