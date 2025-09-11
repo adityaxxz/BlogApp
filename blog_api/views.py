@@ -5,7 +5,7 @@ from rest_framework.permissions import SAFE_METHODS, AllowAny, BasePermission,Is
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend 
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -30,13 +30,27 @@ class PostList(generics.ListAPIView):
     # def get_queryset(self):
     #     user = self.request.user   #user have to be authenticated(logged in)
     #     return Post.objects.filter(author=user) #lists only posts created by the user(author)
+    
+    #returns a list of all posts for the user as filtered by username portion of URL
+    def get_queryset(self):
+        username = self.kwargs['username']
+        return Post.objects.filter(username=username)
 
     #? Filter against the URL(ID) , get post based on title/ slug(string)
     # def get_queryset(self):
     #     slug = self.kwargs.get('pk')
     #     print(slug)
-    #     return Post.objects.filter(slug=slug)  #In urls.py ,use str for slug
-        # return Post.objects.filter(id=slug)  #use int for id
+    #     return Post.objects.filter(id=slug)  #use int for id
+    #     # return Post.objects.filter(slug=slug)  #In urls.py ,use str for slug
+
+    #?Filter against query parameter:
+    def get_queryset(self):
+        queryset = Post.objects.all()   
+        #look in URL for `?username=adra` , DRF puts these in `self.request.query_params` 
+        username = self.request.query_params.get('username')  
+        if username is not None:     
+            queryset = queryset.filter(username=username)
+        return queryset
 
 class PostDetail(generics.RetrieveAPIView):
     serializer_class = PostSerializer
@@ -52,14 +66,16 @@ class PostDetail(generics.RetrieveAPIView):
     #     return Post.objects.filter(slug=slug)
 
 
-#! Post Search
+#! DRF Filtering => Post Search - DjangoFilterBackend & SearchFilter & OrderingFilter
 class PostListDetailFilter(generics.ListAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    
+    #DajngoFilterBackend - get all post by adra '/api/posts/?author=adra'
     # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['slug']
+    # filterset_fields = ['slug', 'author', ]
 
-    #SearchFilter
+    #SearchFilter - get all posts mentioning "django" or "api" - '/api/posts/?search=django api'
     filter_backends = [filters.SearchFilter]
     search_fields = ['=slug']
 
@@ -69,6 +85,26 @@ class PostListDetailFilter(generics.ListAPIView):
     '@' : full text search (only in postgres db)
     '$' : regex search
     """
+
+    #OrderingFilter - order posts by category - '/api/posts/?ordering=category'
+    filter_backends = [filters.OrderingFilter]  
+    ordering_fields = ['status', 'author']  #only sort by these, crucial for security
+    ordering = ['-category']  #sets deafult sorting order - deafult to newest first
+
+#! Combining all 
+    # show all published posts by adra that mention 'REST', sort them by category.
+    #@note /api/posts/?status=published&author=adra&search=REST&ordering=category
+    filter_backends = [filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['status', 'author', ]
+    search_fields = ['title', 'content',]
+    ordering_fields = ['status', 'author', ]
+
+#! Custom generic filtering
+class IsAuthorFilterBackend(filters.BaseFilterBackend):
+    #filter that allows users to see thier own stuff, add this to filter_backends list in view class, so that no need to write get_queryset in all different views
+    def filter_queryset(self, request, queryset):
+        return queryset.filter(author=request.user)
+
 
 #! CRUD
 # class PostCreate(generics.CreateAPIView):
