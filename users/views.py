@@ -14,6 +14,7 @@ class UserRegister(APIView):
         serializer = CustomUserSerializer(data=request.data)
 
         if serializer.is_valid():
+            print(serializer.validated_data)
             user = serializer.save()
             if user:
                 json = serializer.data
